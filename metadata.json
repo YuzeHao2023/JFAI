@@ -1,0 +1,6 @@
+{
+  "name": "JFAI - Journal of Financial Artificial Intelligence",
+  "description": "An international open-access peer-reviewed academic journal in financial AI and computational reasoning. Features Google Scholar compliant indexing, email manuscript submission, and editorial management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
