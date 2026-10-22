@@ -43,11 +43,13 @@ function getEditorAuth(): { username: string; salt: string; passwordHash: string
   } catch (err) {
     console.error('Failed to read editor-auth.json:', err);
   }
-  // Initialize default credentials if not found
+  // Initialize credentials from environment or defaults
   const salt = crypto.randomBytes(16).toString('hex');
-  const passwordHash = hashPassword('EditorPassword2026!', salt);
+  const initialPassword = process.env.EDITOR_PASSWORD || 'EditorPassword2026!';
+  const initialUsername = process.env.EDITOR_USERNAME || 'editor';
+  const passwordHash = hashPassword(initialPassword, salt);
   const defaultAuth = {
-    username: 'editor',
+    username: initialUsername,
     salt,
     passwordHash,
     lastModified: new Date().toISOString(),

@@ -256,8 +256,8 @@ export const AdminBackendView: React.FC<AdminBackendViewProps> = ({
 
     // Static fallback authentication (for Vercel or standalone deployment)
     const localCredsRaw = localStorage.getItem('jfai_editor_creds');
-    let validUser = 'editor';
-    let validPass = 'EditorPassword2026!';
+    let validUser = (import.meta as any).env?.VITE_ADMIN_USERNAME || 'editor';
+    let validPass = (import.meta as any).env?.VITE_ADMIN_PASSWORD || 'EditorPassword2026!';
     if (localCredsRaw) {
       try {
         const parsed = JSON.parse(localCredsRaw);
@@ -275,7 +275,7 @@ export const AdminBackendView: React.FC<AdminBackendViewProps> = ({
       setNewUsername(validUser);
       setLoginPassword('');
     } else {
-      setLoginError('Invalid editor username or password. (Default credentials: editor / EditorPassword2026!)');
+      setLoginError('Invalid editor credentials. Please check your username and password.');
     }
     setLoginLoading(false);
   };
@@ -639,18 +639,11 @@ export const AdminBackendView: React.FC<AdminBackendViewProps> = ({
             Authorized access only for Journal Editors to manage /pdf files and publish articles.
           </p>
 
-          {/* Initial Credentials Notice */}
-          <div className="bg-amber-50/80 border border-amber-200/90 rounded-lg p-3.5 mb-5 text-xs text-amber-950 space-y-1">
-            <div className="font-semibold flex items-center gap-1.5 text-amber-900">
-              <Shield className="w-4 h-4 text-amber-700" />
-              <span>Default Editor Credentials</span>
-            </div>
-            <div className="text-[11px] text-stone-700 font-mono space-y-0.5 pt-1">
-              <div>Username: <span className="bg-white px-1.5 py-0.5 rounded font-bold text-stone-900 border border-amber-200">editor</span></div>
-              <div>Password: <span className="bg-white px-1.5 py-0.5 rounded font-bold text-stone-900 border border-amber-200">EditorPassword2026!</span></div>
-            </div>
-            <p className="text-[10px] text-amber-800 pt-1 italic font-serif">
-              You can change your username and password at any time in "Account & Security" after logging in.
+          {/* Security Notice */}
+          <div className="bg-stone-50 border border-stone-200 rounded-lg p-3.5 mb-5 text-xs text-stone-600 flex items-start gap-2.5">
+            <Shield className="w-4 h-4 text-stone-500 shrink-0 mt-0.5" />
+            <p className="text-[11px] leading-relaxed">
+              Restricted area for accredited editorial board members. All editorial operations and publication actions are cryptographically authenticated.
             </p>
           </div>
 
