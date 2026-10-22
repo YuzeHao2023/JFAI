@@ -15,10 +15,11 @@ import { AdminBackendView } from './views/AdminBackendView';
 import { CitationModal } from './components/CitationModal';
 import { PdfViewerModal } from './components/PdfViewerModal';
 import { Paper } from './types';
+import { getLocalStoredPapers, saveLocalStoredPapers } from './data/initialPapers';
 
 export default function App() {
-  const [papers, setPapers] = useState<Paper[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [papers, setPapers] = useState<Paper[]>(() => getLocalStoredPapers());
+  const [loading, setLoading] = useState(false);
   const [currentView, setCurrentView] = useState<string>('home');
   const [currentArticleSlug, setCurrentArticleSlug] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,16 +28,30 @@ export default function App() {
   const [citationPaper, setCitationPaper] = useState<Paper | null>(null);
   const [pdfViewerPaper, setPdfViewerPaper] = useState<Paper | null>(null);
 
-  // Fetch papers from server API
+  // Fetch papers from server API with automatic static host fallback (e.g. Vercel)
   const fetchPapers = async () => {
     try {
       const res = await fetch('/api/papers');
-      const data = await res.json();
-      if (data.success && Array.isArray(data.papers)) {
-        setPapers(data.papers);
+      if (res.ok) {
+        const text = await res.text();
+        try {
+          const data = JSON.parse(text);
+          if (data.success && Array.isArray(data.papers) && data.papers.length > 0) {
+            setPapers(data.papers);
+            saveLocalStoredPapers(data.papers);
+            return;
+          }
+        } catch {
+          // Response was not JSON (e.g. HTML returned by static host rewrite)
+        }
       }
+      // If server is not responding or on static host like Vercel, keep local papers
+      const local = getLocalStoredPapers();
+      setPapers(local);
     } catch (err) {
-      console.error('Failed to load papers:', err);
+      console.warn('API endpoint not reachable (static host environment). Serving bundled papers:', err);
+      const local = getLocalStoredPapers();
+      setPapers(local);
     } finally {
       setLoading(false);
     }

@@ -27,8 +27,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => onNavigate('home')}
             className="cursor-pointer flex items-center gap-3.5 group select-none"
           >
-            <div className="w-10 h-10 rounded bg-gradient-to-br from-amber-600 to-amber-800 flex items-center justify-center text-stone-100 shadow-inner border border-amber-500/30 group-hover:from-amber-500 group-hover:to-amber-700 transition">
-              <BookOpen className="w-5 h-5 text-amber-100" />
+            <div className="w-10 h-10 rounded bg-blue-600 flex items-center justify-center text-white font-bold font-mono text-sm tracking-wider shadow-inner border border-blue-400/40 group-hover:bg-blue-500 transition select-none">
+              AEP
             </div>
             <div>
               <div className="flex items-center gap-2">

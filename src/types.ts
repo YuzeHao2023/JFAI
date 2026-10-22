@@ -48,5 +48,7 @@ export interface PdfFileInfo {
   fileName: string;
   url: string;
   size: string;
+  sizeBytes?: number;
   modified: string;
+  isReferenced?: boolean;
 }
